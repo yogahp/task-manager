@@ -9,3 +9,4 @@ Route::get('/', function () {
 });
 Route::resource('tasks', TaskController::class);
 Route::resource('projects', ProjectController::class);
+Route::post('tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');
