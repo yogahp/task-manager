@@ -51,8 +51,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'priority' => 'required|integer',
+            'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
         ]);
 

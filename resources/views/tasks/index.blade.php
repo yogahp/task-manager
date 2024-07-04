@@ -17,9 +17,10 @@
         </div>
     </form>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Tasks</h2>
-        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Create Task</a>
+    <div class="d-flex justify-content-end align-items-center mb-3">
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create Task
+        </a>
     </div>
 
     <ul id="sortable" class="list-group">
@@ -28,11 +29,15 @@
                 <span class="handle">&#9776;</span>
                 <span>{{ $task->name }}</span>
                 <div>
-                    <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-info">Edit</a>
+                    <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-info">
+                        <i class="fas fa-edit"></i>
+                    </a>
                     <form method="POST" action="{{ route('tasks.destroy', $task) }}" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </form>
                 </div>
             </li>
