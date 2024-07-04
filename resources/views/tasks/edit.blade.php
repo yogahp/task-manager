@@ -15,6 +15,10 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ $task->name }}" required>
             </div>
             <div class="form-group">
+                <label for="priority">Priority</label>
+                <input type="number" class="form-control" id="priority" name="priority" value="{{ $task->priority }}" required>
+            </div>
+            <div class="form-group">
                 <label for="project_id">Project</label>
                 <select name="project_id" id="project_id" class="form-control" required>
                     @foreach($projects as $project)

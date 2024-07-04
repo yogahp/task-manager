@@ -25,14 +25,12 @@ class TaskController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
+            'priority' => 'required|integer',
             'project_id' => 'required|exists:projects,id',
         ]);
 
-        $priority = Task::where('project_id', $request->project_id)->max('priority') + 1;
-        $data['priority'] = $priority;
-
         Task::create($data);
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index', ['project_id' => $request->project_id]);
     }
 
     public function edit(Task $task)
@@ -45,17 +43,18 @@ class TaskController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
+            'priority' => 'required|integer',
             'project_id' => 'required|exists:projects,id',
         ]);
 
         $task->update($data);
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index', ['project_id' => $task->project_id]);
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index', ['project_id' => $task->project_id]);
     }
 
     public function reorder(Request $request)
