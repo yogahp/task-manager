@@ -1,1 +1,8 @@
 @import "~bootstrap/scss/bootstrap";
+
+.handle {
+    cursor: move;
+    padding: 0 10px;
+    font-size: 1.2em;
+    user-select: none; /* Prevent text selection while dragging */
+}

@@ -25,8 +25,6 @@
         @yield('content')
     </div>
     <script src="{{ mix('js/app.js') }}"></script>
-    <script>
-        @yield('scripts')
-    </script>
+    @yield('scripts')
 </body>
 </html>

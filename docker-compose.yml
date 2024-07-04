@@ -18,6 +18,8 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=root
     command: sh -c "npm run dev & php artisan serve --host=0.0.0.0 --port=8000"
+    depends_on:
+      - db
 
   db:
     image: mariadb:10.5

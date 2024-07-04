@@ -11965,3 +11965,11 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.handle {
+  cursor: move;
+  padding: 0 10px;
+  font-size: 1.2em;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none; /* Prevent text selection while dragging */
+}

@@ -16,11 +16,12 @@
                 </div>
                 <div class="form-group">
                     <label for="priority">Priority</label>
-                    <input type="number" class="form-control" id="priority" name="priority" required>
+                    <input type="number" class="form-control" id="priority" name="priority" value="{{ $lastPriority }}" disabled>
                 </div>
                 <div class="form-group">
                     <label for="project_id">Project</label>
                     <select name="project_id" id="project_id" class="form-control" required>
+                        <option value="">- Select Project -</option>
                         @foreach($projects as $project)
                             <option value="{{ $project->id }}">{{ $project->name }}</option>
                         @endforeach

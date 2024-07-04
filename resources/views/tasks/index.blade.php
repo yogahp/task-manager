@@ -23,7 +23,8 @@
     <ul id="sortable" class="list-group">
         @foreach($tasks as $task)
             <li class="list-group-item d-flex justify-content-between align-items-center" data-id="{{ $task->id }}">
-                {{ $task->name }}
+                <span class="handle">&#9776;</span>
+                <span>{{ $task->name }}</span>
                 <div>
                     <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-info">Edit</a>
                     <form method="POST" action="{{ route('tasks.destroy', $task) }}" style="display:inline;">
@@ -41,6 +42,7 @@
     <script>
         $(function() {
             $("#sortable").sortable({
+                handle: ".handle",
                 update: function(event, ui) {
                     var order = $(this).sortable('toArray', { attribute: 'data-id' });
                     $.post('{{ route("tasks.reorder") }}', {

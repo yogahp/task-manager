@@ -18,19 +18,24 @@ class TaskController extends Controller
     public function create()
     {
         $projects = Project::all();
-        return view('tasks.create', compact('projects'));
+        $lastPriority = Task::max('priority') + 1; // Get the next priority value
+        return view('tasks.create', compact('projects', 'lastPriority'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'priority' => 'required|integer',
+        $request->validate([
+            'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
         ]);
 
-        Task::create($data);
-        return redirect()->route('tasks.index', ['project_id' => $request->project_id]);
+        $task = new Task();
+        $task->name = $request->name;
+        $task->project_id = $request->project_id;
+        $task->priority = Task::max('priority') + 1; // Set priority to the next available value
+        $task->save();
+
+        return redirect()->route('tasks.index');
     }
 
     public function edit(Task $task)
@@ -59,9 +64,14 @@ class TaskController extends Controller
 
     public function reorder(Request $request)
     {
-        foreach ($request->order as $index => $id) {
-            Task::where('id', $id)->update(['priority' => $index + 1]);
+        $order = $request->input('order');
+
+        foreach ($order as $priority => $id) {
+            $task = Task::find($id);
+            $task->priority = $priority + 1; // Priority starts at 1
+            $task->save();
         }
+
         return response()->json(['status' => 'success']);
     }
 }
