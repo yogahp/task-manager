@@ -4,9 +4,8 @@
 
 @section('content')
     <h1>Task Management</h1>
-    <form method="GET" action="{{ route('tasks.index') }}">
+    <form method="GET" action="{{ route('tasks.index') }}" class="mb-3">
         <div class="form-group">
-            <label for="project_id">Select Project</label>
             <select name="project_id" id="project_id" class="form-control" onchange="this.form.submit()">
                 <option value="">- Select Project -</option>
                 @foreach($projects as $project)
@@ -18,7 +17,10 @@
         </div>
     </form>
 
-    <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3">Create Task</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Tasks</h2>
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Create Task</a>
+    </div>
 
     <ul id="sortable" class="list-group">
         @foreach($tasks as $task)

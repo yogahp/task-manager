@@ -10,8 +10,12 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $tasks = Task::where('project_id', $request->project_id)->orderBy('priority')->get();
         $projects = Project::all();
+        $project_id = $request->query('project_id');
+        $tasks = Task::when($project_id, function ($query, $project_id) {
+            return $query->where('project_id', $project_id);
+        })->orderBy('priority')->get();
+
         return view('tasks.index', compact('tasks', 'projects'));
     }
 
@@ -35,7 +39,7 @@ class TaskController extends Controller
         $task->priority = Task::max('priority') + 1; // Set priority to the next available value
         $task->save();
 
-        return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index', ['project_id' => $request->project_id]);
     }
 
     public function edit(Task $task)
