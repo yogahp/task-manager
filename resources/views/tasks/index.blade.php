@@ -8,6 +8,7 @@
         <div class="form-group">
             <label for="project_id">Select Project</label>
             <select name="project_id" id="project_id" class="form-control" onchange="this.form.submit()">
+                <option value="">- Select Project -</option>
                 @foreach($projects as $project)
                     <option value="{{ $project->id }}" {{ request('project_id') == $project->id ? 'selected' : '' }}>
                         {{ $project->name }}
@@ -37,16 +38,18 @@
 @endsection
 
 @section('scripts')
-    $(function() {
-        $("#sortable").sortable({
-            update: function(event, ui) {
-                var order = $(this).sortable('toArray', { attribute: 'data-id' });
-                $.post('{{ route("tasks.reorder") }}', {
-                    order: order,
-                    _token: '{{ csrf_token() }}'
-                });
-            }
+    <script>
+        $(function() {
+            $("#sortable").sortable({
+                update: function(event, ui) {
+                    var order = $(this).sortable('toArray', { attribute: 'data-id' });
+                    $.post('{{ route("tasks.reorder") }}', {
+                        order: order,
+                        _token: '{{ csrf_token() }}'
+                    });
+                }
+            });
+            $("#sortable").disableSelection();
         });
-        $("#sortable").disableSelection();
-    });
+    </script>
 @endsection
