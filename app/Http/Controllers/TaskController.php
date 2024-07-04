@@ -3,62 +3,66 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Task;
+use App\Models\Project;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $tasks = Task::where('project_id', $request->project_id)->orderBy('priority')->get();
+        $projects = Project::all();
+        return view('tasks.index', compact('tasks', 'projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $projects = Project::all();
+        return view('tasks.create', compact('projects'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+            'project_id' => 'required|exists:projects,id',
+        ]);
+
+        $priority = Task::where('project_id', $request->project_id)->max('priority') + 1;
+        $data['priority'] = $priority;
+
+        Task::create($data);
+        return redirect()->route('tasks.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Task $task)
     {
-        //
+        $projects = Project::all();
+        return view('tasks.edit', compact('task', 'projects'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Task $task)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+            'project_id' => 'required|exists:projects,id',
+        ]);
+
+        $task->update($data);
+        return redirect()->route('tasks.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return redirect()->route('tasks.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function reorder(Request $request)
     {
-        //
+        foreach ($request->order as $index => $id) {
+            Task::where('id', $id)->update(['priority' => $index + 1]);
+        }
+        return response()->json(['status' => 'success']);
     }
 }
