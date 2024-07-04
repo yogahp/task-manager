@@ -22,8 +22,8 @@ class TaskController extends Controller
     public function create()
     {
         $projects = Project::all();
-        $lastPriority = Task::max('priority') + 1; // Get the next priority value
-        return view('tasks.create', compact('projects', 'lastPriority'));
+        $lastPriority = Task::max('priority') + 1;
+        return view('tasks.form', compact('projects', 'lastPriority'));
     }
 
     public function store(Request $request)
@@ -33,11 +33,11 @@ class TaskController extends Controller
             'project_id' => 'required|exists:projects,id',
         ]);
 
-        $task = new Task();
-        $task->name = $request->name;
-        $task->project_id = $request->project_id;
-        $task->priority = Task::max('priority') + 1; // Set priority to the next available value
-        $task->save();
+        Task::create([
+            'name' => $request->name,
+            'project_id' => $request->project_id,
+            'priority' => Task::max('priority') + 1,
+        ]);
 
         return redirect()->route('tasks.index', ['project_id' => $request->project_id]);
     }
@@ -45,17 +45,18 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $projects = Project::all();
-        return view('tasks.edit', compact('task', 'projects'));
+        return view('tasks.form', compact('task', 'projects'));
     }
 
     public function update(Request $request, Task $task)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|exists:projects,id',
         ]);
 
-        $task->update($data);
+        $task->update($request->only(['name', 'project_id']));
+
         return redirect()->route('tasks.index', ['project_id' => $task->project_id]);
     }
 
@@ -71,7 +72,7 @@ class TaskController extends Controller
 
         foreach ($order as $priority => $id) {
             $task = Task::find($id);
-            $task->priority = $priority + 1; // Priority starts at 1
+            $task->priority = $priority + 1;
             $task->save();
         }
 
