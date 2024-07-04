@@ -1,5 +1,6 @@
 FROM php:8.2-fpm
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -11,21 +12,29 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     git \
-    curl
+    curl \
+    nodejs \
+    npm
 
+# Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
 # Allow Composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www
 
-# Copy the entire project
+# Copy existing application directory contents
 COPY . .
 
+# Install Composer dependencies
 RUN composer install
+
+# Install npm dependencies
+RUN npm install
 
 RUN composer dump-autoload --optimize
 
