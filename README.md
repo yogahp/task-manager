@@ -128,4 +128,4 @@ docker-compose exec app php artisan config:clear
 
 Feel free to submit pull requests or open issues if you find bugs or have suggestions for improvements.
 
-Made with ❤️ by [Your Name](https://github.com/yogahp)
+Made with ❤️ by [Yoga Hapriana](https://github.com/yogahp)
