@@ -20,7 +20,7 @@ This is a simple task management application built with Laravel. It allows you t
 1. **Clone the repository:**
 
     ```sh
-    git clone https://github.com/yogahp/task-manager-coalition.git
+    git clone https://github.com/yogahp/task-manager.git
     cd task-manager
     ```
 
